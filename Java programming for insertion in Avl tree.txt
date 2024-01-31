@@ -1,0 +1,214 @@
+// Java programming for insertion in AVL tree
+import java.util.*;
+class node
+{
+    int key, height;
+    node left ,right;
+    node(int d)
+    {
+        key=d;
+        height=1;
+    }
+}
+class avltree
+{
+    node root;
+    int height(node n)
+    {
+        if(n==null)
+            return 0;
+            
+            return n.height;
+        
+    }
+    //a unity function get maximum of two integer
+    int max(int a,int b)
+    {
+        return (a>b)? a:b;
+    }
+    //see the diagram 
+    node rightrotate(node y)
+    {
+        node x=y.left;
+        node t2=x.right;
+        
+        // per form rotation
+        x.right=y;
+        y.left=t2;
+        
+        //updata height
+        y.height=max(height(y.left),height(y.right))+1;
+        x.height=max(height(x.left),height(x.right))+1;
+        
+        //return new root
+         return x;
+        
+    }
+    //left rotation
+    node leftrotate(node x)
+      {
+          node y=x.right;
+          node t2=y.left;
+          // perforn rotation
+          y.left=x;
+          x.right=t2;
+          
+          // update height
+          
+          x.height=max(height(x.left),height(x.right))+1;
+          y.height=max(height(y.left),height(y.right))+1;
+          return y;
+      }  
+      // get balance factor
+      int getBalance(node n)
+      {
+          if(n==null)
+          return 0;
+          return height(n.left)-height(n.right);
+      }
+      //insert node
+      node insert(node n,int key)
+      {
+          //1 per form bst insertion
+          if (n == null)
+            return (new node(key));
+ 
+        if (key < n.key)
+            n.left = insert(n.left, key);
+        else if (key > n.key)
+            n.right = insert(n.right, key);
+        else // Duplicate keys not allowed
+            return n;
+          
+          
+          //2 update height of ancsrtor node
+          n.height=1+max(height(n.left),height(n.right));
+          //3 get balance factor in annsetor
+          int balance =getBalance(n);
+          // if this node become unbalance 
+          // left left case :
+          if(balance>1&& key<n.left.key)
+          return rightrotate(n);
+          //right right 
+          if(balance<-1&& key>n.right.key)
+          return leftrotate(n);
+          //left right case
+          if(balance>1&& key >n.left.key)
+          {
+              n.left=leftrotate(n.left);
+              return rightrotate(n);
+          }
+              //right left case
+              if(balance <-1&& key <n.right.key)
+              {
+                  n.right=rightrotate(n.right);
+                  return leftrotate(n);
+                  
+                  
+              }
+              return n;
+         /*given a non empty binary serach tree,return the node with minimum key value found in that tree.
+         Note that the entre tree does not need to be searched.*/
+         Node minValueNode(Node n)
+         {
+             Node current=node;
+             /*loop down to find the leftmost leaf*/
+             while(current.left!=null)
+             current=current.left:
+             return current;
+         }
+         Node deleteNode(Node root,int key)
+         {
+             //STEP1:PERFORM STANDARD BST deleteNode
+             if(root==null)
+             return root;
+             //If the key to be deleted is smaller IncompatibleClassChangeError
+             //the root's key,then it lies in left subtree
+             if(key<root.key)
+             root.left=deleteNode(root.left,key);
+             //If the key to be deleted is greater than 
+             //the root'subtreeelse if(key>root.key)
+             root.right=deleteNode(root.right,key);
+             //if key is same as root's key,then this is the Node
+             else
+             {
+                 //node with only one child or no child
+                 if((root.left==null)||(root.right==null))
+                 {
+                     Node temp=null;
+                     if(temp==root.left)
+                     temp=root.right;
+                     else
+                     temp=root.left;
+                     //No child caseif(temp==null)
+                     {
+                         temp=root;
+                         root=null;
+                     }
+                     else//one child case
+                     root=temp;//copy the contents of the non empty child
+                     
+                 }
+                 else{
+                     Node temp=minValueNode(root.right);
+                     //copy the inorder sucessors data to this Node
+                     root.key=temp.key;
+                     root.right=deleteNode(root.right,temp.key);
+                 }
+         }
+         //if the tree had only one node than return
+         if(root==null)
+         return root;
+         //STEP 2:UPDATE HEIGHT OF THE CURRENT node
+         root.height=max(height(root.left),height(root.right))+1;
+         //STEP 3: GET THE BALANCE FACTOR OF THIS NODE(to check whether this node became unbalanced)
+         int balance=getBalance(root);
+         //if this node become unbalanced then there are 4 case
+         //left left case
+         if(balance>1&&getBalance(root.left)>=0)
+         return rightRotate(root);
+         //left right case
+         if(balance>1&&getBalance(root.left)<0)
+         {
+             root.left=leftRotate(root.left)
+             return rightRotate(root);
+         }
+         if(balance<-1&&gatBalance(root.right)<=0)
+         return leftRotate(root)
+         if(balance<-1&&gatBalance(root.right)>0)
+         {
+             root.right=rightRotate(root.right);
+             return leftRotate(root);
+         }
+         return root;
+         }
+         void preOrder(Node node)
+         {
+             if(node!=null)
+             {
+                 System.out.print(node.key+" ");
+                 preOrder(node.left);
+                 preOrder(node.right)
+             }
+         }
+         public static void main(string arge[])
+         {
+             AVL Tree=new AVLTREE();
+             /*Constructing tree gioven in the above figure*/
+             tree.root=tree.insert(tree.root,9);
+             tree.root=tree.insert(tree.root,5);
+             tree.root=tree.insert(tree.root,10);
+             tree.root=tree.insert(tree.root,0);
+             tree.root=tree.insert(tree.root,6);
+             tree.root=tree.insert(tree.root,11);
+             tree.root=tree.insert(tree.root,-1);
+             tree.root=tree.insert(tree.root,1);
+             tree.root=tree.insert(tree.root,2);
+             system.out.println("Preorder treversal of"+"constructed tree is:");
+             tree.preOrder(tree.root);
+             tree.root=tree.deleteNode(tree.root,10);
+             System.out.println("");
+             System.out.println("Preorder traversal after"+"deletion of 10:");
+             tree.preOrder(tree.root);
+         }
+      }
